@@ -2,6 +2,11 @@
 Changelog
 =========
 
+0.3.2 (2022-10-07)
+==================
+
+* Reference User through django.contrib.auth.get_user_model() instead of a direct class (to be determined by the target project usin django-trench)
+* unset is_primary flag on MFA method deactivation
 
 0.3.1 (2022-02-23)
 ==================
