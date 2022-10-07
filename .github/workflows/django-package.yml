@@ -12,7 +12,7 @@ jobs:
       SECRET_KEY: this_is_no_secret_at_all
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -44,12 +44,12 @@ jobs:
     - name: Check testproject's type hints with mypy
       run: |
         mypy ./testproject/
-    - name: Test with pytest
-      run: |
-        python -m pytest -n 8 --cov-report=xml --cov=testproject/trench testproject/tests/
-    - uses: codecov/codecov-action@v1
-      with:
-        files: ./coverage.xml
-        fail_ci_if_error: true
-        name: trench
-        verbose: true
+    # - name: Test with pytest
+    #   run: |
+    #     python -m pytest -n 8 --cov-report=xml --cov=testproject/trench testproject/tests/
+    # - uses: codecov/codecov-action@v1
+    #   with:
+    #     files: ./coverage.xml
+    #     fail_ci_if_error: true
+    #     name: trench
+    #     verbose: true

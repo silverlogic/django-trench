@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 import logging
 
@@ -11,6 +11,9 @@ from trench.responses import (
 from trench.settings import trench_settings
 
 
+User = get_user_model()
+
+
 class ApplicationMessageDispatcher(AbstractMessageDispatcher):
     def dispatch_message(self) -> DispatchResponse:
         try:
@@ -20,7 +23,7 @@ class ApplicationMessageDispatcher(AbstractMessageDispatcher):
             logging.error(cause, exc_info=True)  # pragma: nocover
             return FailedDispatchResponse(details=str(cause))  # pragma: nocover
 
-    def _create_qr_link(self, user: User) -> str:
+    def _create_qr_link(self, user) -> str:
         return self._get_otp().provisioning_uri(
             getattr(user, User.USERNAME_FIELD),
             trench_settings.APPLICATION_ISSUER_NAME,

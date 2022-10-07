@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 
@@ -25,7 +25,6 @@ from trench.command.replace_mfa_method_backup_codes import (
 )
 from trench.command.set_primary_mfa_method import set_primary_mfa_method_command
 from trench.exceptions import MFAMethodDoesNotExistError, MFAValidationError
-from trench.query.get_mfa_config_by_name import get_mfa_config_by_name_query
 from trench.responses import ErrorResponse
 from trench.serializers import (
     ChangePrimaryMethodValidator,
@@ -36,17 +35,19 @@ from trench.serializers import (
     MFAMethodCodeSerializer,
     MFAMethodDeactivationValidator,
     UserMFAMethodSerializer,
-    generate_model_serializer,
 )
-from trench.settings import SOURCE_FIELD, trench_settings
+from trench.settings import trench_settings
 from trench.utils import available_method_choices, get_mfa_model, user_token_generator
+
+
+User = get_user_model()
 
 
 class MFAStepMixin(APIView, ABC):
     permission_classes = (AllowAny,)
 
     @abstractmethod
-    def _successful_authentication_response(self, user: User) -> Response:
+    def _successful_authentication_response(self, user) -> Response:
         raise NotImplementedError
 
 
@@ -95,18 +96,6 @@ class MFAMethodActivationView(APIView):
 
     @staticmethod
     def post(request: Request, method: str) -> Response:
-        try:
-            source_field = get_mfa_config_by_name_query(name=method).get(SOURCE_FIELD)
-        except MFAMethodDoesNotExistError as cause:
-            return ErrorResponse(error=cause)
-        if source_field is not None:
-            serializer_class = generate_model_serializer(
-                name="MFAMethodActivationValidator",
-                model=request.user.__class__,
-                fields=(source_field,),
-            )
-            serializer = serializer_class(data=request.data)
-            serializer.is_valid(raise_exception=True)
         try:
             mfa = create_mfa_method_command(
                 user_id=request.user.id,

@@ -8,11 +8,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from trench.serializers import TokenSerializer
-from trench.views import MFAFirstStepMixin, MFASecondStepMixin, MFAStepMixin, User
+from trench.views import MFAFirstStepMixin, MFASecondStepMixin, MFAStepMixin
 
 
 class MFAAuthTokenView(MFAStepMixin):
-    def _successful_authentication_response(self, user: User) -> Response:
+    def _successful_authentication_response(self, user) -> Response:
         token, _ = Token.objects.get_or_create(user=user)
         user_logged_in.send(sender=user.__class__, request=self.request, user=user)
         return Response(data=TokenSerializer(token).data)

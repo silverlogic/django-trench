@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from typing import Type
 
@@ -10,11 +10,14 @@ from trench.models import MFAMethod
 from trench.utils import get_mfa_model, user_token_generator
 
 
+User = get_user_model()
+
+
 class AuthenticateSecondFactorCommand:
     def __init__(self, mfa_model: Type[MFAMethod]) -> None:
         self._mfa_model = mfa_model
 
-    def execute(self, code: str, ephemeral_token: str) -> User:
+    def execute(self, code: str, ephemeral_token: str):
         user = user_token_generator.check_token(user=None, token=ephemeral_token)
         if user is None:
             raise InvalidTokenError()
