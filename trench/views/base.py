@@ -25,7 +25,6 @@ from trench.command.replace_mfa_method_backup_codes import (
 )
 from trench.command.set_primary_mfa_method import set_primary_mfa_method_command
 from trench.exceptions import MFAMethodDoesNotExistError, MFAValidationError
-from trench.query.get_mfa_config_by_name import get_mfa_config_by_name_query
 from trench.responses import ErrorResponse
 from trench.serializers import (
     ChangePrimaryMethodValidator,
@@ -37,7 +36,7 @@ from trench.serializers import (
     MFAMethodDeactivationValidator,
     UserMFAMethodSerializer,
 )
-from trench.settings import SOURCE_FIELD, trench_settings
+from trench.settings import trench_settings
 from trench.utils import available_method_choices, get_mfa_model, user_token_generator
 
 
@@ -48,7 +47,7 @@ class MFAStepMixin(APIView, ABC):
     permission_classes = (AllowAny,)
 
     @abstractmethod
-    def _successful_authentication_response(self, user: User) -> Response:
+    def _successful_authentication_response(self, user) -> Response:
         raise NotImplementedError
 
 

@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-import logging
 from django.db.models import Model
 
 from abc import abstractmethod
@@ -58,7 +57,7 @@ class ProtectedActionValidator(RequestBodyValidator):
     def _validate_mfa_method(mfa: MFAMethod) -> None:
         raise NotImplementedError
 
-    def __init__(self, mfa_method_name: str, user: User, *args, **kwargs) -> None:
+    def __init__(self, mfa_method_name: str, user, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._user = user
         self._mfa_method_name = mfa_method_name

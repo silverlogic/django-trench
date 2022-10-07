@@ -7,7 +7,7 @@ from django.utils.http import base36_to_int, int_to_base36
 from django.utils.translation import gettext_lazy as _
 
 from datetime import datetime
-from typing import List, Optional, Tuple, Type
+from typing import List, Tuple, Type
 
 from trench.models import MFAMethod
 from trench.settings import VERBOSE_NAME, trench_settings
@@ -28,10 +28,10 @@ class UserTokenGenerator(PasswordResetTokenGenerator):
     SECRET = settings.SECRET_KEY
     EXPIRY_TIME = 60 * 15
 
-    def make_token(self, user: User) -> str:
+    def make_token(self, user) -> str:
         return self._make_token_with_timestamp(user, int(datetime.now().timestamp()))
 
-    def check_token(self, user: User, token: str) -> Optional[User]:
+    def check_token(self, user, token: str):
         user_model = get_user_model()
         if not token:
             return None
@@ -51,7 +51,7 @@ class UserTokenGenerator(PasswordResetTokenGenerator):
 
         return user
 
-    def _make_token_with_timestamp(self, user: User, timestamp: int, **kwargs) -> str:
+    def _make_token_with_timestamp(self, user, timestamp: int, **kwargs) -> str:
         ts_b36 = int_to_base36(timestamp)
         token_hash = salted_hmac(
             self.KEY_SALT,

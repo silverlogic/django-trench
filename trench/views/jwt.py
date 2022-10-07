@@ -1,11 +1,11 @@
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from trench.views import MFAFirstStepMixin, MFASecondStepMixin, MFAStepMixin, User
+from trench.views import MFAFirstStepMixin, MFASecondStepMixin, MFAStepMixin
 
 
 class MFAJWTView(MFAStepMixin):
-    def _successful_authentication_response(self, user: User) -> Response:
+    def _successful_authentication_response(self, user) -> Response:
         token = RefreshToken.for_user(user=user)
         return Response(data={"refresh": str(token), "access": str(token.access_token)})
 

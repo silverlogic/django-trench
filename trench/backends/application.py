@@ -23,7 +23,7 @@ class ApplicationMessageDispatcher(AbstractMessageDispatcher):
             logging.error(cause, exc_info=True)  # pragma: nocover
             return FailedDispatchResponse(details=str(cause))  # pragma: nocover
 
-    def _create_qr_link(self, user: User) -> str:
+    def _create_qr_link(self, user) -> str:
         return self._get_otp().provisioning_uri(
             getattr(user, User.USERNAME_FIELD),
             trench_settings.APPLICATION_ISSUER_NAME,

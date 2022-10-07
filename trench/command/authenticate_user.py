@@ -11,7 +11,7 @@ User = get_user_model()
 
 class AuthenticateUserCommand:
     @staticmethod
-    def execute(request: Request, username: str, password: str) -> User:
+    def execute(request: Request, username: str, password: str):
         user = authenticate(
             request=request,
             username=username,
