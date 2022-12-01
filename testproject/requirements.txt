@@ -11,11 +11,12 @@ pyjwt<=2.0.1
 
 drf-yasg==1.20.0
 
-pytest==6.2.3
+pytest==7.1.2
 pytest-cov==2.11.1
 pytest-django==4.1.0
 attrs==20.3.0
 coverage==5.5
+flaky==3.7.0
 
 isort
 flake8

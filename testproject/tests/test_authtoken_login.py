@@ -33,4 +33,18 @@ def test_auth_token_both_steps(active_user_with_email_otp):
         path_2nd_factor=client.PATH_AUTH_TOKEN_LOGIN_CODE,
     )
     assert response.status_code == HTTP_200_OK
-    assert response.data.get("auth_token") is not None
+    assert response.data.get("token") is not None
+
+
+@pytest.mark.django_db
+def test_auth_token_both_steps_using_viewset_mixin(active_user_with_email_otp):
+    client = TrenchAPIClient()
+    mfa_method = active_user_with_email_otp.mfa_methods.first()
+    response = client.authenticate_multi_factor(
+        user=active_user_with_email_otp,
+        mfa_method=mfa_method,
+        path="/auth/viewsets/login",
+        path_2nd_factor="/auth/viewsets/login/code",
+    )
+    assert response.status_code == HTTP_200_OK
+    assert response.data.get("token") is not None    

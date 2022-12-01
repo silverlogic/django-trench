@@ -12,7 +12,7 @@ from trench.backends.provider import get_mfa_handler
 from trench.command.authenticate_second_factor import authenticate_second_step_command
 from trench.exceptions import MFAMethodDoesNotExistError, MFAValidationError
 from trench.responses import ErrorResponse
-from trench.serializers import TokenSerializer, CodeLoginSerializer
+from trench.serializers import CodeLoginSerializer, TokenSerializer
 from trench.utils import get_mfa_model, user_token_generator
 from trench.views import MFAFirstStepMixin, MFASecondStepMixin, MFAStepMixin
 
@@ -48,7 +48,7 @@ class MFALoginViewSetMixin(MFAAuthTokenView):
     """
     Mixin for usage with DRF ViewSet classes
     """
-    def return_first_step_response(self, user):
+    def first_step_response(self, user):
         try:
             mfa_model = get_mfa_model()
             mfa_method = mfa_model.objects.get_primary_active(user_id=user.id)
@@ -61,6 +61,11 @@ class MFALoginViewSetMixin(MFAAuthTokenView):
             )
         except MFAMethodDoesNotExistError:
             return self._successful_authentication_response(user=user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.first_step_response(serializer.user)
 
     @action(detail=False, methods=["POST"], permission_classes=[])
     def code(self, request):
