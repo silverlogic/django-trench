@@ -2,6 +2,11 @@
 Changelog
 =========
 
+0.3.3 (2022-12-02)
+==================
+
+* Add a mixin for DRF ViewSets with default implementation of 2 step authentication
+
 0.3.2 (2022-10-07)
 ==================
 
