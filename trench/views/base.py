@@ -3,6 +3,7 @@ from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 
 from abc import ABC, abstractmethod
+from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
@@ -235,3 +236,45 @@ class MFAPrimaryMethodChangeView(APIView):
             return Response(status=HTTP_204_NO_CONTENT)
         except MFAValidationError as cause:
             return ErrorResponse(error=cause)
+
+
+class MFAViewSetMixin(ABC):
+    """
+    Mixin for usage with DRF ViewSet classes
+    """
+    @abstractmethod
+    def _successful_authentication_response(self, user) -> Response:
+        raise NotImplementedError
+
+
+    def first_step_response(self, user):
+        try:
+            mfa_model = get_mfa_model()
+            mfa_method = mfa_model.objects.get_primary_active(user_id=user.id)
+            get_mfa_handler(mfa_method=mfa_method).dispatch_message()
+            return Response(
+                data={
+                    "ephemeral_token": user_token_generator.make_token(user),
+                    "method": mfa_method.name,
+                }
+            )
+        except MFAMethodDoesNotExistError:
+            return self._successful_authentication_response(user=user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.first_step_response(serializer.user)
+
+    @action(detail=False, methods=["POST"], permission_classes=[])
+    def code(self, request):
+        serializer = CodeLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            user = authenticate_second_step_command(
+                code=serializer.validated_data["code"],
+                ephemeral_token=serializer.validated_data["ephemeral_token"],
+            )
+            return self._successful_authentication_response(user=user)
+        except MFAValidationError as cause:
+            return ErrorResponse(error=cause, status=HTTP_401_UNAUTHORIZED)

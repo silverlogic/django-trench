@@ -2,6 +2,11 @@
 Changelog
 =========
 
+0.4.0 (2023-08-09)
+==================
+
+* Extract MFAViewSetMixin to use with Simple Token or JWT authentication
+
 0.3.3 (2022-12-02)
 ==================
 
