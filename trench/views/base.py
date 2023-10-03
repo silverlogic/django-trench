@@ -44,7 +44,7 @@ from trench.serializers import (
     MFAMethodDeactivationValidator,
     UserMFAMethodSerializer,
 )
-from trench.settings import trench_settings
+from trench.settings import SOURCE_FIELD, trench_settings
 from trench.utils import available_method_choices, get_mfa_model, user_token_generator
 
 
@@ -112,8 +112,7 @@ class MFAMethodActivationView(APIView):
         try:
             if source_field is not None and not hasattr(user, source_field):
                 raise MFASourceFieldDoesNotExistError(
-                    source_field,
-                    user.__class__.__name__
+                    source_field, user.__class__.__name__
                 )
 
             mfa = create_mfa_method_command(
@@ -261,10 +260,10 @@ class MFAViewSetMixin(ABC):
     """
     Mixin for usage with DRF ViewSet classes
     """
+
     @abstractmethod
     def _successful_authentication_response(self, user) -> Response:
         raise NotImplementedError
-
 
     def first_step_response(self, user):
         try:

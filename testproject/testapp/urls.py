@@ -8,12 +8,17 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from .router import router
+
 
 urlpatterns = (
     re_path(r"^admin/", admin.site.urls),
     re_path(r"^auth/", include("trench.urls")),
     re_path(r"^auth/jwt/", include("trench.urls.jwt")),
     re_path(r"^auth/token/", include("trench.urls.authtoken")),
+    re_path(
+        r"^auth/viewsets/", include((router.urls, "viewsets"), namespace="viewsets")
+    ),
     re_path(r"^schema/", SpectacularAPIView.as_view(), name="schema"),
     re_path(
         r"^swagger",

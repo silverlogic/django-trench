@@ -1,8 +1,9 @@
 from django.utils.translation import gettext_lazy as _
 
-import logging
 import boto3
 import botocore.exceptions
+import logging
+from botocore.exceptions import ClientError, EndpointConnectionError
 
 from trench.backends.base import AbstractMessageDispatcher
 from trench.responses import (
@@ -10,8 +11,8 @@ from trench.responses import (
     FailedDispatchResponse,
     SuccessfulDispatchResponse,
 )
-from trench.settings import AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION
-from botocore.exceptions import ClientError, EndpointConnectionError
+from trench.settings import AWS_ACCESS_KEY, AWS_REGION, AWS_SECRET_KEY
+
 
 class AWSMessageDispatcher(AbstractMessageDispatcher):
     _SMS_BODY = _("Your verification code is: ")

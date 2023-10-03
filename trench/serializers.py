@@ -6,7 +6,7 @@ from abc import abstractmethod
 from rest_framework.authtoken.models import Token
 from rest_framework.fields import CharField, ChoiceField
 from rest_framework.serializers import ModelSerializer, Serializer
-from typing import Any, OrderedDict
+from typing import Any, Iterable, OrderedDict, Type
 
 from trench.backends.provider import get_mfa_handler
 from trench.command.remove_backup_code import remove_backup_code_command
