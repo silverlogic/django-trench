@@ -2,6 +2,8 @@
 django-trench
 =============
 
+This is a fork from https://github.com/merixstudio/django-trench meant to be used with baseapp packages
+
 .. image:: https://cybersecurity-excellence-awards.com/wp-content/uploads/2021/06/badges_2022_Silver.png
    :target: https://cybersecurity-excellence-awards.com/candidates/merixstudio-django-trench-multi-factor-authentication-set/
 

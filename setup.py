@@ -4,7 +4,7 @@ from trench import __version__
 
 
 setup(
-    name="django-trench",
+    name="baseapp-django-trench",
     version=__version__,
     packages=find_packages(exclude=("testproject", "testproject.*")),
     include_package_data=True,
@@ -12,7 +12,7 @@ setup(
     description="REST Multi-factor authentication package for Django",
     long_description=open("README.rst").read(),
     long_description_content_type="text/x-rst",
-    url="https://github.com/merixstudio/django-trench",
+    url="https://github.com/silverlogic/django-trench",
     author="Merixstudio",
     author_email="trench@merixstudio.com",
     install_requires=[
