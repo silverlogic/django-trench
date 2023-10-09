@@ -6,6 +6,5 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-
     model = User
     fieldsets = BaseUserAdmin.fieldsets

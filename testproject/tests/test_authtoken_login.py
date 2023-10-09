@@ -47,4 +47,4 @@ def test_auth_token_both_steps_using_viewset_mixin(active_user_with_email_otp):
         path_2nd_factor="/auth/viewsets/login/code",
     )
     assert response.status_code == HTTP_200_OK
-    assert response.data.get("token") is not None    
+    assert response.data.get("token") is not None

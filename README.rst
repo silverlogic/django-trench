@@ -2,6 +2,8 @@
 django-trench
 =============
 
+This is a fork from https://github.com/merixstudio/django-trench meant to be used with baseapp packages
+
 .. image:: https://cybersecurity-excellence-awards.com/wp-content/uploads/2021/06/badges_2022_Silver.png
    :target: https://cybersecurity-excellence-awards.com/candidates/merixstudio-django-trench-multi-factor-authentication-set/
 
@@ -40,9 +42,9 @@ Features
 Supported versions
 ******************
 
-* Python 3.7, 3.8, 3.9
-* Django 2.0, 2.1, 2.2, 3.0
-* Django REST Framework 3.10
+* Python 3.7, 3.8, 3.9, 3.10, 3.11
+* Django 2.0, 2.1, 2.2, 3.0, 3.1, 3.2, 4.0, 4.1
+* Django REST Framework 3.10, 3.11, 3.12, 3.13, 3.14
 
 | If you are going to use JWT authentication:
 

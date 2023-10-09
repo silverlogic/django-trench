@@ -2,6 +2,8 @@ import datetime
 import environ
 import os
 
+from trench import __version__
+
 
 root = environ.Path(__file__) - 1
 env = environ.Env()
@@ -14,6 +16,7 @@ DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 CORS_ORIGIN_ALLOW_ALL = env.bool("CORS_ORIGIN_ALLOW_ALL", default=False)
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -25,7 +28,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
-    "drf_yasg",
+    "drf_spectacular",
     "testapp",
     "trench",
 ]
@@ -86,8 +89,6 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
 
@@ -99,8 +100,17 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Django Trench example app API",
+    "DESCRIPTION": "This example illustrates the usage of Django Trench package",
+    "VERSION": __version__,
+    "SERVE_INCLUDE_SCHEMA": False,
+    "CONTACT": {"email": "code@merixstudio.com"},
+    "LICENSE": {"name": "MIT License"},
+}
+
 
 AUTH_USER_MODEL = "testapp.User"
 
@@ -141,6 +151,15 @@ TRENCH_AUTH = {
             "SMSAPI_ACCESS_TOKEN": "token",
             "SMSAPI_FROM_NUMBER": "123 456 789",
         },
+        "sms_aws": {
+            "VERBOSE_NAME": "sms_aws",
+            "VALIDITY_PERIOD": 30,
+            "HANDLER": "trench.backends.aws.AWSMessageDispatcher",
+            "SOURCE_FIELD": "phone_number",
+            "AWS_ACCESS_KEY": "access_key",
+            "AWS_SECRET_KEY": "secret_key",
+            "AWS_REGION": "region",
+        },
         "email": {
             "VERBOSE_NAME": "email",
             "VALIDITY_PERIOD": 600,
@@ -152,7 +171,7 @@ TRENCH_AUTH = {
         },
         "app": {
             "VERBOSE_NAME": "app",
-            "VALIDITY_PERIOD": 600,
+            "VALIDITY_PERIOD": 30,
             "USES_THIRD_PARTY_CLIENT": True,
             "HANDLER": "trench.backends.application.ApplicationMessageDispatcher",
         },
