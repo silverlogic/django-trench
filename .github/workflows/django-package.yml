@@ -19,9 +19,6 @@ jobs:
           - python-version: "3.11"
             django-version: "5.0.*"
             os: ubuntu-latest
-          - python-version: "3.11"
-            django-version: "6.0.*"
-            os: ubuntu-latest
           - python-version: "3.12"
             django-version: "5.0.*"
             os: ubuntu-latest
