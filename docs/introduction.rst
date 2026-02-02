@@ -21,8 +21,8 @@ Requirements
 Supported versions
 ******************
 
-* Python 3.7, 3.8. 3.9, 3.10, 3.11
-* Django 2.x, 3.x, 4.x
+* Python 3.7, 3.8. 3.9, 3.10, 3.11, 3.12
+* Django 2.x, 3.x, 4.x, 5.x, 6.x
 * Django REST Framework >= 3.10
 
 Quick Start

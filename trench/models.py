@@ -1,3 +1,5 @@
+import inspect
+
 from django.conf import settings
 from django.db.models import (
     CASCADE,
@@ -17,6 +19,12 @@ from django.utils.translation import gettext_lazy as _
 from typing import Any, Iterable
 
 from trench.exceptions import MFAMethodDoesNotExistError
+
+CHECK_CONSTRAINT_KW = (
+    "condition"
+    if "condition" in inspect.signature(CheckConstraint).parameters
+    else "check"
+)
 
 
 class MFAUserMethodManager(Manager):
@@ -88,7 +96,10 @@ class MFAMethod(Model):
                 name="unique_user_is_primary",
             ),
             CheckConstraint(
-                check=(Q(is_primary=True) & Q(is_active=True)) | Q(is_primary=False),
+                **{
+                    CHECK_CONSTRAINT_KW: (Q(is_primary=True) & Q(is_active=True))
+                    | Q(is_primary=False)
+                },
                 name="primary_is_active",
             ),
         )
