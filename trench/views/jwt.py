@@ -7,7 +7,12 @@ from trench.views import MFAFirstStepMixin, MFASecondStepMixin, MFAStepMixin
 class MFAJWTView(MFAStepMixin):
     def _successful_authentication_response(self, user) -> Response:
         token = RefreshToken.for_user(user=user)
-        return Response(data={"refresh": str(token), "access": str(token.access_token)})
+        return Response(
+            data={
+                "refresh": str(token),
+                "access": str(token.access_token),  # type: ignore[attr-defined]
+            }
+        )
 
 
 class MFAFirstStepJWTView(MFAJWTView, MFAFirstStepMixin):
